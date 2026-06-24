@@ -79,13 +79,13 @@ public class LoginClientTest extends BaseApiTest {
                 .extract().response();
         accessToken = response.jsonPath().getString("accessToken");
 
-        ClientModel wrongEmailClient = new ClientModel(
+        ClientModel wrongPasswordClient = new ClientModel(
                 client.getEmail(),
-                faker.regexify("[A-Za-z]{5,10}")+ "ya.ru",
+                faker.regexify("[A-Za-z]{5,10}")+ "ya.ru",,
                 client.getName()
         );
 
-        loginClient(wrongEmailClient)
+        loginClient(wrongPasswordClient)
                 .then()
                 .log().all()
                 .statusCode(HTTP_UNAUTHORIZED)
