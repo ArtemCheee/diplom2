@@ -40,16 +40,16 @@ public class OrderSteps {
                 .extract().response();
     }
 
-//    @Step
-//    @DisplayName("Создать заказ без авторизацией")
-//    public static Response createOrderWithoutAuth(OrderModel order){
-//        return given()
-//                .log().all()
-//                .contentType(ContentType.JSON)
-//                .body(order)
-//                .when()
-//                .post(CREATE_ORDER_PATH)
-//                .then()
-//                .extract().response();
-//    }
+    @Step
+    @DisplayName("Создать заказ без авторизацией")
+    public static Response createOrderWithoutAuth(OrderModel order){
+        return given()
+                .log().all()
+                .contentType(ContentType.JSON)
+                .body(order)
+                .when()
+                .post(CREATE_ORDER_PATH)
+                .then()
+                .extract().response();
+    }
 }
