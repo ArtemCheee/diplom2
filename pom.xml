@@ -27,7 +27,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
-            <scope>test</scope>
+
         </dependency>
 
         <!-- REST Assured -->
@@ -35,7 +35,7 @@
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <version>${rest-assured.version}</version>
-            <scope>test</scope>
+
         </dependency>
 
         <!-- JSON Path (для REST Assured) -->
@@ -43,7 +43,7 @@
             <groupId>io.rest-assured</groupId>
             <artifactId>json-path</artifactId>
             <version>${rest-assured.version}</version>
-            <scope>test</scope>
+
         </dependency>
 
         <!-- XML Path (для REST Assured) -->
@@ -51,7 +51,7 @@
             <groupId>io.rest-assured</groupId>
             <artifactId>xml-path</artifactId>
             <version>${rest-assured.version}</version>
-            <scope>test</scope>
+
         </dependency>
 
         <!-- Allure -->
@@ -59,7 +59,7 @@
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-junit4</artifactId>
             <version>${allure.version}</version>
-            <scope>test</scope>
+
         </dependency>
 
         <!-- Lombok -->
@@ -82,7 +82,12 @@
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-rest-assured</artifactId>
             <version>${allure.version}</version>
-            <scope>test</scope>
+
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.15.3</version>
         </dependency>
     </dependencies>
 
