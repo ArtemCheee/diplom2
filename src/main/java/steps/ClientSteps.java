@@ -6,10 +6,7 @@ import io.restassured.http.ContentType;
 import model.ClientModel;
 
 
-import static data.ClientData.CREATE_CLIENT_PATH;
-
-
-import static data.ClientData.DELETE_CLIENT_PATH;
+import static data.ClientData.*;
 import static io.restassured.RestAssured.given;
 
 public class ClientSteps {
@@ -38,6 +35,18 @@ public class ClientSteps {
                 .delete(DELETE_CLIENT_PATH)
                 .then()
                 .log().all()
+                .extract().response();
+
+    }
+
+    public static Response loginClient(ClientModel client){
+        return given()
+                .log().all()
+                .contentType(ContentType.JSON)
+                .body(client)
+                .when()
+                .post(LOGIN_CLIENT_PATH)
+                .then()
                 .extract().response();
 
     }
