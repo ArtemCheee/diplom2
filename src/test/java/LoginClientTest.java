@@ -33,7 +33,7 @@ public class LoginClientTest extends BaseApiTest {
                 .statusCode(HTTP_OK)
                 .body("success", equalTo(true))
                 .extract().response();
-        accessToken = response.jsonPath().getString("accessToken");;
+        accessToken = response.jsonPath().getString("accessToken");
 
     }
     @Test
@@ -81,7 +81,7 @@ public class LoginClientTest extends BaseApiTest {
 
         ClientModel wrongPasswordClient = new ClientModel(
                 client.getEmail(),
-                faker.regexify("[A-Za-z]{5,10}")+ "ya.ru",,
+                faker.regexify("[A-Za-z]{5,10}")+ "ya.ru",
                 client.getName()
         );
 
