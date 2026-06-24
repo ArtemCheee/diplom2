@@ -2,22 +2,20 @@ import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import model.OrderModel;
 import org.junit.Test;
-import steps.OrderSteps;
-
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+
+import static java.net.HttpURLConnection.*;
 import static steps.OrderSteps.createOrderWithAuth;
 import static data.BurgerBuilder.burgerIngredientList;
 import static data.ClientData.generateRandomClient;
-import static java.net.HttpURLConnection.HTTP_OK;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static steps.ClientSteps.createClient;
 import static steps.ClientSteps.loginClient;
+import static steps.OrderSteps.createOrderWithoutAuth;
 
 
-public class MakeOrderTest extends BaseApiTest{
+public class MakeOrderTest extends BaseApiTest {
     @Test
     @DisplayName("Создание заказа с авторизацией")
 
@@ -52,32 +50,124 @@ public class MakeOrderTest extends BaseApiTest{
 
 
     }
-}
 
-//
-//
-////        Response ingredientsResponse = getIngredientList()
-////                .then()
-////                .log().all()
-////                .statusCode(HTTP_OK)
-////                .extract().response();
-////        List<String> ingredientIds = ingredientsResponse.jsonPath().getList("data._id");
-////        Collections.shuffle(ingredientIds);
-////        List<String> orderIngredients = ingredientIds.subList(0, 3);
-//////        List<String> orderIngredients = Arrays.asList(
-//////                ingredientIds.get(0),
-//////                ingredientIds.get(1)
-//////        );
-////        OrderModel order = new OrderModel();
-////        order.setIngredients(orderIngredients);
-////
-////        OrderSteps.createOrderWithAuth(order, accessToken)
-////                .then()
-////                .log().all()
-////                .statusCode(HTTP_OK)
-////                .body("success", equalTo(true))
-////                .body("order", org.hamcrest.Matchers.notNullValue())
-////                .extract().response();
-//
-//    }
-//}
+    @Test
+    @DisplayName("Создание заказа ,без авторизации")
+    public void createOrderWithutAuthorization() {
+
+
+        List<String> burgerIngredients = burgerIngredientList();
+
+        OrderModel order = new OrderModel();
+        order.setIngredients(burgerIngredients);
+
+        createOrderWithoutAuth(order)
+                .then()
+                .log().all()
+                .statusCode(HTTP_OK)
+                .body("success", equalTo(true))
+                .body("order.number", notNullValue());
+
+
+    }
+
+    @Test
+    @DisplayName("Создание заказа c ингредиентами")
+
+       public void createOrderWithIngredientsTest(){
+
+            client = generateRandomClient();
+
+            createClient(client)
+                    .then()
+                    .log().all()
+                    .statusCode(HTTP_OK)
+                    .body("success", equalTo(true));
+
+            Response response = loginClient(client)
+                    .then()
+                    .log().all()
+                    .statusCode(HTTP_OK)
+                    .body("success", equalTo(true))
+                    .extract().response();
+            accessToken = response.jsonPath().getString("accessToken");
+
+            List<String> burgerIngredients = burgerIngredientList();
+
+            OrderModel order = new OrderModel();
+            order.setIngredients(burgerIngredients);
+
+            createOrderWithAuth(order, accessToken)
+                    .then()
+                    .log().all()
+                    .statusCode(HTTP_OK)
+                    .body("success", equalTo(true))
+                    .body("order.number", notNullValue());
+
+
+        }
+    @Test
+    @DisplayName("Создание заказа без ингредиентов")
+
+    public void createOrderWithoutIngredientsTest(){
+        client = generateRandomClient();
+
+        createClient(client)
+                .then()
+                .log().all()
+                .statusCode(HTTP_OK)
+                .body("success", equalTo(true));
+
+        Response response = loginClient(client)
+                .then()
+                .log().all()
+                .statusCode(HTTP_OK)
+                .body("success", equalTo(true))
+                .extract().response();
+        accessToken = response.jsonPath().getString("accessToken");
+
+        OrderModel order = new OrderModel();
+
+        createOrderWithAuth(order, accessToken)
+                .then()
+                .log().all()
+                .statusCode(HTTP_BAD_REQUEST)
+                .body("success", equalTo(false))
+                .body("message", equalTo("Ingredient ids must be provided"));
+    }
+
+    @Test
+    @DisplayName("Создание заказа с неверным хешем ингредиентов")
+
+    public void createOrderWithWrongIngredientHash(){
+
+        client = generateRandomClient();
+
+        createClient(client)
+                .then()
+                .log().all()
+                .statusCode(HTTP_OK)
+                .body("success", equalTo(true));
+
+        Response response = loginClient(client)
+                .then()
+                .log().all()
+                .statusCode(HTTP_OK)
+                .body("success", equalTo(true))
+                .extract().response();
+        accessToken = response.jsonPath().getString("accessToken");
+
+        List<String> burgerIngredients = burgerIngredientList();
+        String wrongIngredientHash = "розовый гусь";
+        burgerIngredients.set(0, wrongIngredientHash);
+
+        OrderModel order = new OrderModel();
+        order.setIngredients(burgerIngredients);
+
+        createOrderWithAuth(order, accessToken)
+                .then()
+                .log().all()
+                .statusCode(HTTP_INTERNAL_ERROR);
+    }
+
+}
