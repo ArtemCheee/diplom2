@@ -158,7 +158,7 @@ public class MakeOrderTest extends BaseApiTest {
         accessToken = response.jsonPath().getString("accessToken");
 
         List<String> burgerIngredients = burgerIngredientList();
-        String wrongIngredientHash = "розовый гусь";
+        String wrongIngredientHash = "pink_goose"; // а на русском "розовый гусь" даст 200, сервер просто берет 2 ингр-та
         burgerIngredients.set(0, wrongIngredientHash);
 
         OrderModel order = new OrderModel();
