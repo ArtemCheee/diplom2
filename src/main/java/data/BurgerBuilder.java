@@ -16,19 +16,22 @@ public class BurgerBuilder {
 
     public static List<String> burgerIngredientList() {
 
-        Response response = getIngredientList()
+        List<String> allIngredients = getIngredientList()
                 .then()
                 .statusCode(200)
-                .extract().response();
-        List<String> allIngredients = response.jsonPath().getList("data._id");
+                .extract()
+                .jsonPath()
+                .getList("data._id");
 
         List<String> otherIngredients = new ArrayList<>(allIngredients);
         otherIngredients.remove(BUN_1);
         otherIngredients.remove(BUN_2);
 
+        List<String> randomIngredients = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
         int randomIndex = random.nextInt(otherIngredients.size());
-        String randomIngredient = otherIngredients.get(randomIndex);
-
+        randomIngredients.add(otherIngredients.get(randomIndex));
+}
         String requiredIngredient;
 
         if (random.nextBoolean()) {
@@ -39,7 +42,7 @@ public class BurgerBuilder {
 
         List<String> burgerIngredients = new ArrayList<>();
         burgerIngredients.add(requiredIngredient);
-        burgerIngredients.add(randomIngredient);
+        burgerIngredients.addAll(randomIngredients);
 
         return burgerIngredients;
     }
