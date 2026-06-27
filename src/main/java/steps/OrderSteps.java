@@ -1,7 +1,6 @@
 package steps;
 
 import io.qameta.allure.Step;
-import io.qameta.allure.junit4.DisplayName;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import model.OrderModel;
@@ -14,8 +13,8 @@ public class OrderSteps {
 
     private static String accessToken;
 
-    @Step
-    @DisplayName("Список ингридиентов")
+    @Step("Список ингридиентов")
+
     public static Response getIngredientList(){
         return given()
                 .log().all()
@@ -26,8 +25,8 @@ public class OrderSteps {
                 .extract().response();
     }
 
-    @Step
-    @DisplayName("Создать заказ с авторизацией")
+    @Step("Создать заказ с авторизацией")
+
     public static Response createOrderWithAuth(OrderModel order, String accessToken){
         return given()
                 .log().all()
@@ -40,8 +39,8 @@ public class OrderSteps {
                 .extract().response();
     }
 
-    @Step
-    @DisplayName("Создать заказ без авторизацией")
+    @Step("Создать заказ без авторизацией")
+
     public static Response createOrderWithoutAuth(OrderModel order){
         return given()
                 .log().all()
