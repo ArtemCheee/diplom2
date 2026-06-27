@@ -8,6 +8,7 @@ import org.junit.Test;
 
 
 import static java.net.HttpURLConnection.*;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static steps.ClientSteps.createClient;
 import static data.ClientData.generateRandomClient;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -19,15 +20,12 @@ public class CreateClientTest extends BaseApiTest {
     @DisplayName("создать уникального пользователя")
 
     public void createClientTest() {
-        client = generateRandomClient();
 
-        Response response = createClient(client)
-                .then()
-                .log().all()
+        createClientBefore();
+        clientResponse.then()
                 .statusCode(HTTP_OK)
                 .body("success", equalTo(true))
-                .extract().response();
-        accessToken = response.jsonPath().getString("accessToken");
+                .body("accessToken", notNullValue());
     }
 
     @Test
@@ -35,17 +33,7 @@ public class CreateClientTest extends BaseApiTest {
 
     public void createExistingClientTest() {
 
-        client = generateRandomClient();
-
-        Response response = createClient(client)
-                .then()
-                .log().all()
-                .statusCode(HTTP_OK)
-                .body("success", equalTo(true))
-                .extract().response();
-        accessToken = response.jsonPath().getString("accessToken");
-
-
+        createClientBefore();
         createClient(client)
                 .then()
                 .log().all()
