@@ -20,21 +20,9 @@ public class MakeOrderTest extends BaseApiTest {
     @DisplayName("Создание заказа с авторизацией")
 
     public void createOrderWithAuthorization() {
-        client = generateRandomClient();
+        createClientBefore();
 
-        createClient(client)
-                .then()
-                .log().all()
-                .statusCode(HTTP_OK)
-                .body("success", equalTo(true));
-
-        Response response = loginClient(client)
-                .then()
-                .log().all()
-                .statusCode(HTTP_OK)
-                .body("success", equalTo(true))
-                .extract().response();
-        accessToken = response.jsonPath().getString("accessToken");
+        loginClientBefore();
 
         List<String> burgerIngredients = burgerIngredientList();
 
@@ -55,7 +43,7 @@ public class MakeOrderTest extends BaseApiTest {
     @DisplayName("Создание заказа ,без авторизации")
     public void createOrderWithutAuthorization() {
 
-
+        createClientBefore();
         List<String> burgerIngredients = burgerIngredientList();
 
         OrderModel order = new OrderModel();
@@ -76,21 +64,9 @@ public class MakeOrderTest extends BaseApiTest {
 
        public void createOrderWithIngredientsTest(){
 
-            client = generateRandomClient();
 
-            createClient(client)
-                    .then()
-                    .log().all()
-                    .statusCode(HTTP_OK)
-                    .body("success", equalTo(true));
-
-            Response response = loginClient(client)
-                    .then()
-                    .log().all()
-                    .statusCode(HTTP_OK)
-                    .body("success", equalTo(true))
-                    .extract().response();
-            accessToken = response.jsonPath().getString("accessToken");
+        createClientBefore();
+        loginClientBefore();
 
             List<String> burgerIngredients = burgerIngredientList();
 
@@ -110,21 +86,8 @@ public class MakeOrderTest extends BaseApiTest {
     @DisplayName("Создание заказа без ингредиентов")
 
     public void createOrderWithoutIngredientsTest(){
-        client = generateRandomClient();
-
-        createClient(client)
-                .then()
-                .log().all()
-                .statusCode(HTTP_OK)
-                .body("success", equalTo(true));
-
-        Response response = loginClient(client)
-                .then()
-                .log().all()
-                .statusCode(HTTP_OK)
-                .body("success", equalTo(true))
-                .extract().response();
-        accessToken = response.jsonPath().getString("accessToken");
+        createClientBefore();
+        loginClientBefore();
 
         OrderModel order = new OrderModel();
 
@@ -141,21 +104,8 @@ public class MakeOrderTest extends BaseApiTest {
 
     public void createOrderWithWrongIngredientHash(){
 
-        client = generateRandomClient();
-
-        createClient(client)
-                .then()
-                .log().all()
-                .statusCode(HTTP_OK)
-                .body("success", equalTo(true));
-
-        Response response = loginClient(client)
-                .then()
-                .log().all()
-                .statusCode(HTTP_OK)
-                .body("success", equalTo(true))
-                .extract().response();
-        accessToken = response.jsonPath().getString("accessToken");
+        createClientBefore();
+        loginClientBefore();
 
         List<String> burgerIngredients = burgerIngredientList();
         String wrongIngredientHash = "pink_goose"; // а на русском "розовый гусь" даст 200, сервер просто берет 2 ингр-та
