@@ -6,6 +6,7 @@ import org.junit.Test;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertTrue;
 import static steps.ClientSteps.loginClient;
 
 public class LoginClientTest extends BaseApiTest {
@@ -18,13 +19,8 @@ public class LoginClientTest extends BaseApiTest {
     public void loginWithExistingClientTest(){
 
         createClientBefore();
-        Response response = loginClient(client)
-                .then()
-                .log().all()
-                .statusCode(HTTP_OK)
-                .body("success", equalTo(true))
-                .extract().response();
-        accessToken = response.jsonPath().getString("accessToken");
+        loginClientBefore();
+        assertTrue(accessToken.startsWith("Bearer "));
 
     }
     @Test

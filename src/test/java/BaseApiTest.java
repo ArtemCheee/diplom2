@@ -5,8 +5,9 @@ import org.junit.After;
 import org.junit.Before;
 
 import static data.ClientData.generateRandomClient;
-import static steps.ClientSteps.createClient;
-import static steps.ClientSteps.deleteClient;
+import static java.net.HttpURLConnection.HTTP_OK;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static steps.ClientSteps.*;
 
 public class BaseApiTest {
 
@@ -32,6 +33,17 @@ public class BaseApiTest {
 
 
         accessToken = clientResponse.jsonPath().getString("accessToken");
+    }
+
+    protected void loginClientBefore() {
+
+        Response response = loginClient(client)
+                .then()
+                .log().all()
+                .statusCode(HTTP_OK)
+                .body("success", equalTo(true))
+                .extract().response();
+        accessToken = response.jsonPath().getString("accessToken");
     }
 
     @After
